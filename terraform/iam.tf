@@ -1,4 +1,5 @@
 data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "ecs_task_execution" {
   name = "${var.project_name}-ecs-execution-role"
 
@@ -106,14 +107,16 @@ resource "aws_iam_role_policy" "github_actions_deployment" {
         ]
         Resource = "*"
       },
+
       {
-  Effect = "Allow"
-  Action = [
-    "ecs:UpdateService",
-    "ecs:DescribeServices"
-  ]
-  Resource = "arn:aws:ecs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
-},
+        Effect = "Allow"
+        Action = [
+          "ecs:UpdateService",
+          "ecs:DescribeServices"
+        ]
+        Resource = "arn:aws:ecs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:service/${aws_ecs_cluster.main.name}/${aws_ecs_service.app.name}"
+      },
+
       {
         Effect = "Allow"
         Action = [
