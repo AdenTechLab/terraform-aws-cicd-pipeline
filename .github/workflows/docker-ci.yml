@@ -1,0 +1,40 @@
+
+name: Docker CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - "Dockerfile"
+      - ".github/workflows/docker-ci.yml"
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    name: Test and Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: pip install -r app/requirements.txt
+
+      - name: Run Python Tests
+        run: pytest app/test_main.py
+        env:
+          PYTHONPATH: app
+
+      - name: Build Docker Image
+        run: docker build -t terraform-aws-cicd-pipeline:latest .
