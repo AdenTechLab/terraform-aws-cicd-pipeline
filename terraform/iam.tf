@@ -62,7 +62,7 @@ resource "aws_iam_role" "github_actions" {
           }
 
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:AdenTechLab/terraform-aws-cicd-pipeline:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:sub" = "repo:AdenTechLab@342403133/terraform-aws-cicd-pipeline@1464036773:ref:refs/heads/main"
           }
         }
       }
