@@ -46,13 +46,17 @@ resource "aws_ecs_task_definition" "app" {
     Name        = "${var.project_name}-task"
     Environment = var.environment
   }
+
+  lifecycle {
+    ignore_changes = [container_definitions]
+  }
 }
 
 resource "aws_ecs_service" "app" {
   name            = "${var.project_name}-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.app.arn
-  desired_count   = 1
+  desired_count   = 0
   launch_type     = "FARGATE"
 
   network_configuration {
@@ -75,4 +79,10 @@ resource "aws_ecs_service" "app" {
   depends_on = [
     aws_iam_role_policy_attachment.ecs_task_execution
   ]
+  lifecycle {
+    ignore_changes = [
+      task_definition,
+      desired_count
+    ]
+  }
 }
